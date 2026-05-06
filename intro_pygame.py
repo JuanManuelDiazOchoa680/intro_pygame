@@ -1,7 +1,7 @@
 import pygame
 pygame.init()
 ventana = pygame.display.set_mode((1360, 720))
-pygame.display.set_caption("Mi primer juego")
+pygame.display.set_caption("OMG")
 
 negro = (0, 0, 0)
 blanco = (255, 255, 255)
