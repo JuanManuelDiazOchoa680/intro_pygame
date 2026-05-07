@@ -1,166 +1,91 @@
 # importamos la libreria pygame
 import pygame
 import sys
+import random
+from PIL import Image
 
-# inicializamos los modulos de la librería
+# Inicializamos la librería
 pygame.init()
 
-# Establecer dimensiones de la ventana
+# Ventana
 ventana = pygame.display.set_mode((1000, 700))
+pygame.display.set_caption("Rebotes Imagen Random")
 
-# establecer titulo de la ventana
-pygame.display.set_caption("Rebotes rectángulo")
+# --- Configuración ---
+IMAGE_PATH = "image/image.png" 
 
-# definición colores
-rojo = (255,0,0)
-azul = (0,0,255)
+# Definimos el tamaño aquí
+ANCHO_IMG = 250
+ALTO_IMG = 200
 
-# variable de movimiento
+def get_random_color():
+    return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+def get_pygame_image(color):
+    img = Image.open(IMAGE_PATH).convert("RGBA")
+    color_layer = Image.new("RGBA", img.size, color)
+    # Mantiene la transparencia original usando el canal alfa como máscara
+    colored_img = Image.composite(color_layer, img, img) 
+    
+    # Conversión técnica de Pillow a Pygame
+    surface = pygame.image.fromstring(colored_img.tobytes(), colored_img.size, colored_img.mode)
+    
+    # --- AGREGADO: CAMBIO DE TAMAÑO ---
+    surface = pygame.transform.scale(surface, (ANCHO_IMG, ALTO_IMG))
+    
+    return surface
+
+# --- Variables iniciales ---
+negro = (0,0,0)
 XX = 50
+XY = 150
 MOVIMIENTO_XX = 5
 MOVIMIENTO_XY = 5
-YX = 60
-MOVIMIENTO_YX = 5
-MOVIMIENTO_YY = 5
-ZX = 70
-MOVIMIENTO_ZX = 5
-MOVIMIENTO_ZY = 5
-AX = 80
-MOVIMIENTO_AX = 5
-MOVIMIENTO_AY = 5
-BX = 90
-MOVIMIENTO_BX = 5
-MOVIMIENTO_BY = 5
 
+# Cargamos la primera imagen y configuramos el tiempo
+current_image = get_pygame_image(get_random_color())
+ultimo_cambio = pygame.time.get_ticks()
 
-XY = 150
-YY = 160
-ZY = 170
-AY = 180
-BY = 190
-
-
-
-
-# Objeto para la gestión del tiempo
 clock = pygame.time.Clock()
 
-
-# bucle principal del juego
+# Bucle principal
 while True:
-    # Maximo de fotogramas por segundo
-    clock.tick(150)
+    clock.tick(50)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            pygame.quit()
             sys.exit()
 
-    ventana.fill(azul)
-
-
-
-    # movimiento del rectángulo
+    # Movimiento
     XX = XX + MOVIMIENTO_XX
     XY = XY + MOVIMIENTO_XY
-    YX = YX + MOVIMIENTO_YX
-    YY = YY + MOVIMIENTO_YY
-    ZX = ZX + MOVIMIENTO_ZX
-    ZY = ZY + MOVIMIENTO_ZY
-    AX = AX + MOVIMIENTO_AX
-    AY = AY + MOVIMIENTO_AY
-    BX = BX + MOVIMIENTO_BX
-    BY = BY + MOVIMIENTO_BY
 
-# eje x
-
-    if XX >= 960:
-        XX = 960
+    # Rebotes Eje X 
+    # (Ajustado para que rebote según el ancho de la ventana y el tamaño de la imagen)
+    if XX >= (800):
+        XX = (800)
         MOVIMIENTO_XX = -5
-
-    elif XX <= 0:
-        XX = 0
+        current_image = get_pygame_image(get_random_color())
+    elif XX <= -50:
+        XX = -50
         MOVIMIENTO_XX = 5
+        current_image = get_pygame_image(get_random_color())
 
-    if YX >= 960:
-        YX = 960
-        MOVIMIENTO_YX = -5
-
-    elif YX <= 0:
-        YX = 0
-        MOVIMIENTO_YX = 5
-
-    if ZX >= 960:
-        ZX = 960
-        MOVIMIENTO_ZX = -5
-
-    elif ZX <= 0:
-        ZX = 0
-        MOVIMIENTO_ZX = 5
-
-    if AX >= 960:
-        AX = 960
-        MOVIMIENTO_AX = -5
-
-    elif AX <= 0:
-        AX = 0
-        MOVIMIENTO_AX = 5
-
-    if BX >= 960:
-        BX = 960
-        MOVIMIENTO_BX = -5
-
-    elif BX <= 0:
-        BX = 0
-        MOVIMIENTO_BX = 5
-
-
-# eje y
-    if XY >= 660:
-        XY = 660
+    # Rebotes Eje Y
+    # (Ajustado para que rebote según el alto de la ventana y el tamaño de la imagen)
+    if XY >= (550):
+        XY = (550)
         MOVIMIENTO_XY = -5
-
-    elif XY <= 0:
-        XY = 0
+        current_image = get_pygame_image(get_random_color())
+    elif XY <= -60:
+        XY = -60
         MOVIMIENTO_XY = 5
+        current_image = get_pygame_image(get_random_color())
 
-    if YY >= 660:
-        YY = 660
-        MOVIMIENTO_YY = -5
+    ventana.fill(negro)
 
-    elif YY <= 0:
-        YY = 0
-        MOVIMIENTO_YY = 5
-
-    if ZY >= 660:
-        ZY = 660
-        MOVIMIENTO_ZY = -5
-
-    elif ZY <= 0:
-        ZY = 0
-        MOVIMIENTO_ZY = 5
-
-    if AY >= 660:
-        AY = 660
-        MOVIMIENTO_AY = -5
-
-    elif AY <= 0:
-        AY = 0
-        MOVIMIENTO_AY = 5
-
-    if BY >= 660:
-        BY = 660
-        MOVIMIENTO_BY = -5
-
-    elif BY <= 0:
-        BY = 0
-        MOVIMIENTO_BY = 5
-
-
-    # dibujar rectangulo en ventana
-    pygame.draw.rect(ventana, rojo, (XX,XY,40,40))
-    pygame.draw.rect(ventana, rojo, (YX,YY,40,40))
-    pygame.draw.rect(ventana, rojo, (ZX,ZY,40,40))
-    pygame.draw.rect(ventana, rojo, (AX,AY,40,40))
-    pygame.draw.rect(ventana, rojo, (BX,BY,40,40))
-    # actualizar visualización de la ventana
+    # --- LO QUE PONES EN EL BLIT ---
+    ventana.blit(current_image, (XX, XY))
+    
     pygame.display.flip()
