@@ -1,10 +1,11 @@
+# crear una ciudad de hierro con parque de atracciones usando los elementos graficos vistos con pygame
 import math
 import pygame
 import sys
+import random
 
 pygame.init()
 ventana = pygame.display.set_mode((1000, 600))
-pygame.display.set_caption("Ciudad Pacman")
 
 gris = (128, 128, 128)
 gris_oscuro = (64, 64, 64)
@@ -14,94 +15,77 @@ rojo = (255, 0, 0)
 naranja = (255, 165, 0)
 naranja_oscuro = (255, 140, 0)
 amarillo = (255, 255, 0)
+verde = (0, 255, 0)
+azul = (0, 0, 255)
+morado = (128, 0, 128)
+rosado = (255, 192, 203)
 
 pi = math.pi
 
-texto = pygame.font.SysFont("Arial", 35, True, True)
-texto_renderizado = texto.render("JUAN MANUEL", True, blanco)
+#edificios
 
-pacmans = [
-    {"x": 100, "y": 450, "vx": 4},
-    {"x": 350, "y": 450, "vx": -3},
-    {"x": 600, "y": 450, "vx": 5},
-    {"x": 850, "y": 450, "vx": -4},
-]
+pygame.draw.rect(ventana, gris, (20, 10, 80, 500))
+pygame.draw.rect(ventana, gris, (120, 200, 100, 500))
+pygame.draw.rect(ventana, gris, (240, 400, 200, 500))
+pygame.draw.rect(ventana, gris, (460, 10, 40, 500))
+pygame.draw.rect(ventana, gris, (520, 300, 80, 500))
+pygame.draw.rect(ventana, gris, (620, 200, 200, 500))
+pygame.draw.rect(ventana, gris, (840, 300, 150, 500))
 
-clock = pygame.time.Clock()
+#piso
+
+pygame.draw.rect(ventana, gris_oscuro, (0, 500, 1000, 100))
+
+# sillas de laa rueda de la fortuna
+
+pygame.draw.rect(ventana, blanco, (690, 160, 20, 20))
+pygame.draw.line(ventana, blanco, (690, 160), (700, 150), 3)
+pygame.draw.line(ventana, blanco, (710, 160), (700, 150), 3)
+
+pygame.draw.rect(ventana, blanco, (690, 460, 20, 20))
+pygame.draw.line(ventana, blanco, (690, 460), (700, 450), 3)
+pygame.draw.line(ventana, blanco, (710, 460), (700, 450), 3)
+
+pygame.draw.rect(ventana, blanco, (540, 310, 20, 20))
+pygame.draw.line(ventana, blanco, (540, 310), (550, 300), 3)
+pygame.draw.line(ventana, blanco, (560, 310), (550, 300), 3)
+
+pygame.draw.rect(ventana, blanco, (840, 310, 20, 20))  
+pygame.draw.line(ventana, blanco, (840, 310), (850, 300), 3)
+pygame.draw.line(ventana, blanco, (860, 310), (850, 300), 3) 
+
+# rueda de la fortuna
+
+pygame.draw.circle(ventana, rojo, (700, 300), 150, 3)
+pygame.draw.line(ventana, rojo, (700, 150), (700, 450), 3)
+pygame.draw.line(ventana, rojo, (550, 300), (850, 300), 3)
+pygame.draw.line(ventana, rojo, (600, 190), (800, 410), 3)
+pygame.draw.line(ventana, rojo, (600, 410), (800, 190), 3)
+
+#base de la rueda de la fortuna
+pygame.draw.line(ventana, naranja, (700, 300), (680, 490), 3)
+pygame.draw.line(ventana, naranja, (700, 300), (720, 490), 3)
+pygame.draw.rect(ventana, naranja_oscuro, (650, 490, 100, 10))
+
+#pacmans (personas)
+pygame.draw.arc(ventana, amarillo, (100, 450, 50, 50), pi/4, 7*pi/4, 100)
+
+pygame.draw.arc(ventana, amarillo, (350, 450, 50, 50), 5*pi/4, 11*pi/4, 100)
+
+pygame.draw.arc(ventana, amarillo, (600, 450, 50, 50), pi/4, 7*pi/4, 100)
+
+pygame.draw.arc(ventana, amarillo, (850, 450, 50, 50), 5*pi/4, 11*pi/4, 100)
 
 
-def dibujar_escena(surface):
-    surface.fill(negro)
+pygame.display.set_caption("Ciudad Pacman")
 
-    pygame.draw.rect(surface, gris, (20, 10, 80, 500))
-    pygame.draw.rect(surface, gris, (120, 200, 100, 500))
-    pygame.draw.rect(surface, gris, (240, 400, 200, 500))
-    pygame.draw.rect(surface, gris, (460, 10, 40, 500))
-    pygame.draw.rect(surface, gris, (520, 300, 80, 500))
-    pygame.draw.rect(surface, gris, (620, 200, 200, 500))
-    pygame.draw.rect(surface, gris, (840, 300, 150, 500))
-
-    pygame.draw.rect(surface, gris_oscuro, (0, 500, 1000, 100))
-
-    pygame.draw.rect(surface, blanco, (690, 160, 20, 20))
-    pygame.draw.line(surface, blanco, (690, 160), (700, 150), 3)
-    pygame.draw.line(surface, blanco, (710, 160), (700, 150), 3)
-
-    pygame.draw.rect(surface, blanco, (690, 460, 20, 20))
-    pygame.draw.line(surface, blanco, (690, 460), (700, 450), 3)
-    pygame.draw.line(surface, blanco, (710, 460), (700, 450), 3)
-
-    pygame.draw.rect(surface, blanco, (540, 310, 20, 20))
-    pygame.draw.line(surface, blanco, (540, 310), (550, 300), 3)
-    pygame.draw.line(surface, blanco, (560, 310), (550, 300), 3)
-
-    pygame.draw.rect(surface, blanco, (840, 310, 20, 20))
-    pygame.draw.line(surface, blanco, (840, 310), (850, 300), 3)
-    pygame.draw.line(surface, blanco, (860, 310), (850, 300), 3)
-
-    pygame.draw.circle(surface, rojo, (700, 300), 150, 3)
-    pygame.draw.line(surface, rojo, (700, 150), (700, 450), 3)
-    pygame.draw.line(surface, rojo, (550, 300), (850, 300), 3)
-    pygame.draw.line(surface, rojo, (600, 190), (800, 410), 3)
-    pygame.draw.line(surface, rojo, (600, 410), (800, 190), 3)
-
-    pygame.draw.line(surface, naranja, (700, 300), (680, 490), 3)
-    pygame.draw.line(surface, naranja, (700, 300), (720, 490), 3)
-    pygame.draw.rect(surface, naranja_oscuro, (650, 490, 100, 10))
-
-    surface.blit(texto_renderizado, (350, 20))
-
-
-def dibujar_pacman(surface, x, y, direccion_derecha):
-    rect = pygame.Rect(x, y, 50, 50)
-    if direccion_derecha:
-        inicio = pi / 4
-        fin = 7 * pi / 4
-    else:
-        inicio = 5 * pi / 4
-        fin = 11 * pi / 4
-    pygame.draw.arc(surface, amarillo, rect, inicio, fin, 100)
-
+texto = pygame.font.SysFont("Arial", 35, 1 , 1)
+texto_renderizado = texto.render("JUAN MANUEL", 1, blanco)
+ventana.blit(texto_renderizado, (350, 20))
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-
-    for pacman in pacmans:
-        pacman["x"] += pacman["vx"]
-        if pacman["x"] <= 0:
-            pacman["x"] = 0
-            pacman["vx"] *= -1
-        elif pacman["x"] >= 950:
-            pacman["x"] = 950
-            pacman["vx"] *= -1
-
-    dibujar_escena(ventana)
-    for pacman in pacmans:
-        direccion_derecha = pacman["vx"] > 0
-        dibujar_pacman(ventana, pacman["x"], pacman["y"], direccion_derecha)
-
     pygame.display.update()
-    clock.tick(50)

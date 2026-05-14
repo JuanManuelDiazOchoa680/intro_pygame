@@ -50,7 +50,7 @@ clock = pygame.time.Clock()
 
 # Bucle principal
 while True:
-    clock.tick(50)
+    clock.tick(40)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
